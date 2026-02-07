@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSFiddle apb9Lgyh</title>
+
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Georgia', serif;
+  background: linear-gradient(to bottom right, #ffccd5, #ffe6f0);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.card {
+  background: rgba(255,255,255,0.9);
+  padding: 30px;
+  width: 85%;
+  max-width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2 {
+  color: #c9184a;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #ff4d6d;
+  color: white;
+}
+
+input, textarea {
+  width: 80%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.tiny {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 10px;
+  background: transparent;
+  color: #999;
+}
+
+.message {
+  margin-top: 15px;
+  color: #6a040f;
+}
+
+  </style>
+
+  
+</head>
+<body>
+  <div class="card">
+  <h2 id="question"></h2>
+  <div id="options"></div>
+  <p class="message" id="message"></p>
+</div>
+
+
+  <script>
+    let step = 1;
+let noCountLove = 0;
+let noCountValentine = 0;
+
+function loadQuestion() {
+  const q = document.getElementById("question");
+  const o = document.getElementById("options");
+  const m = document.getElementById("message");
+
+  m.innerHTML = "";
+  o.innerHTML = "";
+
+  // 1️⃣ Do you love me?
+  if (step === 1) {
+    q.innerHTML = "Do you love me? ❤️";
+    createYesNo(
+      () => next(),
+      () => {
+        noCountLove++;
+        const msgs = [
+          "Hmm… my heart felt that 😌",
+          "Are you sure? Think again 🥺",
+          "Okay but my smile says otherwise 💕"
+        ];
+        m.innerHTML = msgs[noCountLove - 1] || "";
+        if (noCountLove >= 3) next();
+      }
+    );
+  }
+
+  // 2️⃣ Movie question
+  if (step === 2) {
+    q.innerHTML = "What movie did we watch first together? 🎬";
+    createInput("Type here...", ans => {
+      if (ans.toLowerCase().trim() === "sanam teri kasam") next();
+      else m.innerHTML = "Hint: it made us emotional ❤️";
+    });
+  }
+
+  // 3️⃣ Will you ever leave me? ✅ Only No button
+  if (step === 3) {
+    q.innerHTML = "Will you ever leave me?";
+    let n = document.createElement("button");
+    n.innerText = "No 🙄";
+    n.onclick = () => {
+      m.innerHTML =
+        "Then promise ❤️<br>We’ll never say this again even in frustration,<br>won’t bring mom-dad into situations,<br>and will face everything as a TEAM 🤝";
+      setTimeout(next, 3500);
+    };
+    o.appendChild(n);
+  }
+
+  // 4️⃣ Favourite colour
+  if (step === 4) {
+    q.innerHTML = "Which colour is my favourite? 🎨";
+    createInput("Your answer...", ans => {
+      if (ans.toLowerCase().trim() === "blue") next();
+      else m.innerHTML = "It’s calm, deep and like the sky 💙";
+    });
+  }
+
+  // 5️⃣ Best us moment
+  if (step === 5) {
+    q.innerHTML =
+      "Which *us* moment is so special that even if everything fades, you’d want to remember this one? 🥹";
+    createTextarea("Write from your heart...", next);
+  }
+
+  // 6️⃣ How much do you love me?
+  if (step === 6) {
+    q.innerHTML = "How much do you love me? 💞";
+    ["Little", "Little more", "Much more", "A lot"].forEach(text => {
+      let b = document.createElement("button");
+      b.innerText = text;
+      b.onclick = next;
+      o.appendChild(b);
+    });
+
+    let infinity = document.createElement("button");
+    infinity.innerText = "infinity";
+    infinity.className = "tiny";
+    infinity.onclick = next;
+    o.appendChild(infinity);
+  }
+
+  // 7️⃣ Shayari
+  if (step === 7) {
+    q.innerHTML = "Say a shayari for me 🌙";
+    createTextarea("Your shayari...", next);
+  }
+
+  // 8️⃣ Valentine proposal
+  if (step === 8) {
+    q.innerHTML = "Will you be my Valentine? 💘";
+    createYesNo(
+      () => end(), // Yes
+      () => {
+        noCountValentine++;
+        const msgs = [
+          "Oho someone’s acting tough 😏",
+          "My smile says you’re lying 😌",
+          "Okay last chance 😘"
+        ];
+        m.innerHTML = msgs[noCountValentine - 1] || "";
+        if (noCountValentine >= 3) end();
+      }
+    );
+  }
+}
+
+// Helper functions
+function createYesNo(yesFn, noFn) {
+  const o = document.getElementById("options");
+  let y = document.createElement("button");
+  let n = document.createElement("button");
+  y.innerText = "Yes ❤️";
+  n.innerText = "No 🙄";
+  y.onclick = yesFn;
+  n.onclick = noFn;
+  o.appendChild(y);
+  o.appendChild(n);
+}
+
+function createInput(placeholder, cb) {
+  const o = document.getElementById("options");
+  let i = document.createElement("input");
+  let b = document.createElement("button");
+  i.placeholder = placeholder;
+  b.innerText = "Next";
+  b.onclick = () => cb(i.value);
+  o.appendChild(i);
+  o.appendChild(b);
+}
+
+function createTextarea(placeholder, cb) {
+  const o = document.getElementById("options");
+  let t = document.createElement("textarea");
+  let b = document.createElement("button");
+  t.placeholder = placeholder;
+  b.innerText = "Next";
+  b.onclick = cb;
+  o.appendChild(t);
+  o.appendChild(b);
+}
+
+function next() {
+  step++;
+  loadQuestion();
+}
+
+function end() {
+  document.getElementById("question").innerHTML =
+    "💖 You are my today, my tomorrow, my always. 💖<br><br>“In your smile, I found my home.”";
+  document.getElementById("options").innerHTML = "";
+  document.getElementById("message").innerHTML = "";
+}
+
+// Initialize
+loadQuestion();
+
+  </script>
+</body>
+</html>
