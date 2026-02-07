@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>For My Valentine </title>
+
+<style>
+body{
+    text-align:center;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(#ffe6f0, #fff0f5);
+    height:100vh;
+    overflow:hidden;
+}
+
+h1{
+    margin-top:200px;
+    font-size:45px;
+    color:#ff2e63;
+}
+
+button{
+    padding:15px 30px;
+    font-size:20px;
+    margin:20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+#yes{
+    background:#ff2e63;
+    color:white;
+}
+
+#no{
+    background:gray;
+    color:white;
+    position:absolute;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Will you be my Valentine? </h1>
+
+<button id="yes" onclick="yesClicked()">YES</button>
+<button id="no" onmouseover="moveButton()">NO</button>
+
+<script>
+
+function yesClicked(){
+document.body.innerHTML =
+`
+<h1 style="margin-top:150px;color:#ff2e63;">
+Congratulations, you're officially my Valentine 
+</h1>
+
+<h2 style="width:70%;margin:auto;color:#444;line-height:1.6;">
+I did not need a special day to love you, but I wanted a special day to tell you.
+You matter to me more than you know, more than I say sometimes.
+From best friend to something so much more, you became my home, my favorite part of life.
+I never planned it, but now I can't imagine my life without you.
+Thank you for choosing me, because I'd choose you in every lifetime.
+<br><br>
+Happy Valentine's Day Mari Bakudiii <br>
+I LOVE YOU SO MUCH NIRUUU
+</h2>
+`;
+}
+
+function moveButton(){
+    let no = document.getElementById("no");
+    let x = Math.random() * (window.innerWidth - 120);
+    let y = Math.random() * (window.innerHeight - 120);
+    no.style.left = x + "px";
+    no.style.top = y + "px";
+}
+
+</script>
+
+</body>
+</html>
